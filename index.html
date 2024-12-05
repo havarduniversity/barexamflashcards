@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Exam Flashcards - Seedspeed</title>
+    <link rel="shortcut icon" href="/card-game_4298182 (2).png" type="image/x-icon">
+    <style>
+body {
+    font-family: 'Poppins', Arial, sans-serif;
+    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.flashcard {
+    background-color: #ffffff;
+    width: 350px;
+    height: 240px;
+    perspective: 1000px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s ease-in-out;
+    transform-style: preserve-3d;
+}
+
+.flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+.flashcard-front {
+    background-color: #007bff;
+    color: white;
+    box-shadow: inset 0 -5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard-back {
+    background-color: #28a745;
+    color: white;
+    transform: rotateY(180deg);
+    box-shadow: inset 0 -5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.flashcard.flipped .flashcard-inner {
+    transform: rotateY(180deg);
+}
+
+.controls {
+    justify-content: center;
+    margin-top: 20px;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+    outline: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.controls button:hover:not(:disabled) {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.controls button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+@media (max-width: 768px) {
+    .flashcard {
+        width: 300px;
+        height: 200px;
+    }
+
+    .controls button {
+        padding: 10px 15px;
+        font-size: 0.9rem;
+    }
+}
+.banner {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: repeating-linear-gradient(
+        45deg,
+        green,
+        green 10px,
+        green 10px,
+        green 20px
+    );
+    color: #ffffff;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+
+}
+
+/* Close button styling */
+.close-banner {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ff0000;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    font-size: 2rem;
+    font-weight: bold;
+    width: 140px;
+    height: 140px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    outline: none;
+    transition: background-color 0.3s ease;
+}
+
+/* Close button hover effect */
+.close-banner:hover {
+    background-color: #cc0000;
+}
+
+/* Adjust body content to avoid overlap */
+body {
+    margin-top: 60px; /* Prevent the banner from overlapping content */
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <p><a style="text-decoration: none;     color: #ffffff;
+"  href="https://havarduniversity.github.io">havarduniversity.github.io</a></p>
+        <button class="close-banner" id="close-banner">&times;</button>
+    </div>
+    <div class="container">
+        <h1>Bar Exam FlashCard <span>🎄</span></h1>
+        <div class="flashcard" id="flashcard">
+            <div class="flashcard-inner">
+                <div class="flashcard-front" id="flashcard-front">
+                    <p>Question will appear here</p>
+                </div>
+                <div class="flashcard-back" id="flashcard-back">
+                    <p>Answer will appear here</p>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="prev-btn" disabled>&lt; Previous</button>
+            <button id="scramble-btn">Scramble</button>
+            <button id="next-btn">Next &gt;</button>
+        </div>
+    </div>
+   
+    <script>
+        // Paste the questions array here
+        let questions = [
+        ["How many senators are from each state?", "2 senators per state"],
+                    ["The number of representatives in the House is based on a state’s ______.", "Population"],
+                    ["Congress is made up of two houses. This is called ______.", "Bicameral"],
+                    ["How long is a member of the House of Representatives term?", "2 years"],
+                    ["Who approves the admission of a new state?", "Congress and the President"],
+                    ["How many current members are in the House of Representatives?", "435 total (in 2011)"],
+                    ["What is the minimum age of a senator?", "30 years"],
+                    ["How long must a senator have been a U.S. citizen?", "At least 9 years"],
+                    ["What is the minimum age of a House of Representatives?", "25 years"],
+                    ["How long must a representative have been a U.S. citizen?", "At least 7 years"],
+                    ["What is the title of the leader of the House of Representatives?", "Speaker of the House"],
+                    ["Who has the power to declare War?", "Congress"],
+                    ["Who is the jury in a presidential impeachment?", "The Senate"],
+                    ["Which branch of government consists of Congress and creates the laws?", "Legislative Branch"],
+                    ["What is the Supreme law of the land?", "The U.S. Constitution"],
+                    ["What is the shared power between the federal government and the state governments called?", "Federalism"],
+                    ["What words in the preamble show the U.S. belief in self-government?", "\"We the People\""],
+                    ["How many articles are there in the Constitution?", "7"],
+                    ["How long is a term for a senator?", "6 years"],
+                    ["A bill must be approved by both houses of Congress and the President before it becomes a ______.", "Law"],
+                    ["Who must approve judges, cabinet members, and ambassadors that the President appoints?", "The Senate"],
+                    ["The department heads of the Executive Branch make up the President’s _______.", "Cabinet"],
+                    ["What word means a change in the Constitution?", "Amendment"],
+                    ["What system allows each branch of government to limit the powers of the other two branches?", "Checks and Balances"],
+                    ["How long is a term for a President?", "4 years"],
+                    ["How many terms can a President serve?", "2 terms"],
+                    ["How many amendments to the Constitution?", "27"],
+                    ["What vote is required to override a presidential veto?", "Two-thirds of both houses of Congress"],
+                    ["What branch of government includes the President, and his cabinet and carries out the law?", "Executive Branch"],
+                    ["Who has the power to veto laws?", "The President"],
+                    ["The President appoints a _______ to lead each department in the Executive Branch.", "Secretary"],
+                    ["Which branch of government has the sole power to interpret the law, determine the constitutionality of the law, and apply it to individual cases?", "Judicial Branch"],
+                    ["The President must be a natural-born citizen. What does that mean?", "Born as a U.S. citizen"],
+                    ["What are the first 10 amendments to the Constitution called?", "The Bill of Rights"],
+                    ["What is the correct word for a person who makes laws?", "Legislator"],
+                    ["What type of court reviews a trial court’s verdict for errors?", "Appellate Court"],
+                    ["How many justices serve on the Supreme Court today?", "9"],
+                    ["How many departments are in the executive branch?", "15"],
+                    ["Who is the commander in chief of the armed forces?", "The President"],
+                    ["What is the term for a Supreme Court Judge?", "Lifetime appointment"],
+                    ["Impeach means to charge a public official with a crime done while in office.", "True"],
+                    ["What vote is needed to impeach?", "Simple majority in the House"],
+                    ["Who is the jury?", "The Senate"],
+                    ["When an appellate court agrees with a trial court's decision they ______ it.", "Affirm"],
+                    ["When an appellate court changes the decision of a trial court’s decision they _______ it.", "Reverse"],
+                    ["The power of deciding what is constitutional is called?", "Judicial Review"],
+                    ["What department includes the military and is responsible for protecting our nation’s military?", "Department of Defense"],
+                    ["What department manages our relationships with foreign countries?", "Department of State"],
+                    ["Which court hears cases involving federal laws, the U.S. Constitution, and disputes between citizens from different states?", "Federal Courts"],
+                    ["What court hears cases in which private citizens sue each other in court?", "Civil Court"],
+                    ["What is the highest court in the country?", "The Supreme Court"],
+                    ["What is the oldest federal law enforcement agency?", "U.S. Marshals Service"],
+                    ["What is the decision in a court trial called?", "Verdict"],
+                    ["What type of trial has no jury - just a judge that gives the verdict?", "Bench Trial"],
+                    ["What speech is the president required to make annually?", "State of the Union"],
+                    ["What department includes the Secret Service that protects the President, Vice President, and their families?", "Department of Homeland Security"]];
+        
+// Variables to track current flashcard and studied counter
+let currentIndex = 0;
+let studiedCount = 0;
+
+// Elements
+const flashcard = document.getElementById("flashcard");
+const flashcardFront = document.getElementById("flashcard-front");
+const flashcardBack = document.getElementById("flashcard-back");
+const prevBtn = document.getElementById("prev-btn");
+const nextBtn = document.getElementById("next-btn");
+const scrambleBtn = document.getElementById("scramble-btn");
+const closeBannerBtn = document.getElementById("close-banner");
+
+// Add a counter display to the page
+const counterDisplay = document.createElement("div");
+counterDisplay.style.marginTop = "20px";
+counterDisplay.style.fontSize = "1.2rem";
+counterDisplay.style.fontWeight = "bold";
+counterDisplay.textContent = `Studied: ${studiedCount}`;
+document.body.appendChild(counterDisplay);
+
+// Initialize the flashcard content
+function updateFlashcard() {
+    flashcardFront.innerHTML = `<p>${questions[currentIndex][0]}</p>`;
+    flashcardBack.innerHTML = `<p>${questions[currentIndex][1]}</p>`;
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === questions.length - 1;
+}
+
+// Smooth content update with fade-out and fade-in effect
+function smoothUpdate() {
+    flashcard.style.opacity = 0; // Fade out
+    setTimeout(() => {
+        updateFlashcard(); // Update content
+        flashcard.style.opacity = 1; // Fade in
+    }, 300); // Delay matches the transition duration
+}
+
+// Function to update the counter
+function updateCounter() {
+    counterDisplay.textContent = `Studied: ${studiedCount}`;
+}
+
+// Flip flashcard
+flashcard.addEventListener("click", () => {
+    flashcard.classList.toggle("flipped");
+});
+
+// Navigation buttons
+prevBtn.addEventListener("click", () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+        smoothUpdate();
+        studiedCount++;
+        updateCounter();
+    }
+});
+
+nextBtn.addEventListener("click", () => {
+    if (currentIndex < questions.length - 1) {
+        currentIndex++;
+        smoothUpdate();
+        studiedCount++;
+        updateCounter();
+    }
+});
+
+// Scramble button
+scrambleBtn.addEventListener("click", () => {
+    questions = questions.sort(() => Math.random() - 0.5); // Shuffle questions
+    currentIndex = 0; // Reset to the first question
+    smoothUpdate();
+    studiedCount = 0; // Reset counter
+    updateCounter();
+    flashcard.classList.remove("flipped"); // Reset flip
+});
+
+// Close the banner when the "X" button is clicked
+// Close the banner when the "X" button is clicked
+closeBannerBtn.addEventListener("click", () => {
+    const banner = document.querySelector(".banner"); // Select the banner using its class
+    banner.style.display = "none"; // Hide the banner
+});
+
+
+// Initialize the first flashcard
+updateFlashcard();
+
+
+            </script>
+</body>
+</html>
+
+
