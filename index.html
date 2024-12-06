@@ -1,15 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-S4JKYKP7Y4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-S4JKYKP7Y4');
-</script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S4JKYKP7Y4"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-S4JKYKP7Y4');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bar Exam Flashcards - Seedspeed</title>
@@ -38,7 +30,7 @@ h1 {
 }
 
 .flashcard {
-    background-color: #ffffff;
+    background-color: #000000;
     width: 350px;
     height: 240px;
     perspective: 1000px;
@@ -49,6 +41,9 @@ h1 {
     justify-content: center;
     align-items: center;
     transition: transform 0.3s ease-in-out;
+}
+.flashcard {
+    transition: opacity 0.3s ease-in-out, transform 0.8s ease-in-out;
 }
 
 .flashcard-inner {
@@ -219,7 +214,18 @@ body {
 body {
     margin-top: 60px; /* Prevent the banner from overlapping content */
 }
-
+.studied-counter {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #007bff; /* Matches the theme's blue color */
+    text-align: center;
+    background-color: #f9f9f9; /* Subtle background for contrast */
+    padding: 10px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
+    display: inline-block; /* Ensures it doesn't stretch full width */
+}   
     </style>
 </head>
 <body>
@@ -322,6 +328,12 @@ const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const scrambleBtn = document.getElementById("scramble-btn");
 const closeBannerBtn = document.getElementById("close-banner");
+function updateFlashcard() {
+    flashcardFront.innerHTML = `<p>${questions[currentIndex][0]}</p>`;
+    flashcardBack.innerHTML = `<p>${questions[currentIndex][1]}</p>`;
+    prevBtn.disabled = currentIndex === 0;
+    nextBtn.disabled = currentIndex === questions.length - 1;
+}
 
 // Add a counter display to the page
 const counterDisplay = document.createElement("div");
@@ -332,20 +344,18 @@ counterDisplay.textContent = `Studied: ${studiedCount}`;
 document.body.appendChild(counterDisplay);
 
 // Initialize the flashcard content
-function updateFlashcard() {
-    flashcardFront.innerHTML = `<p>${questions[currentIndex][0]}</p>`;
-    flashcardBack.innerHTML = `<p>${questions[currentIndex][1]}</p>`;
-    prevBtn.disabled = currentIndex === 0;
-    nextBtn.disabled = currentIndex === questions.length - 1;
-}
 
-// Smooth content update with fade-out and fade-in effect
 function smoothUpdate() {
-    flashcard.style.opacity = 0; // Fade out
+    // Ensure the card is not flipped before transitioning
+    flashcard.classList.remove("flipped");
+
+    // Fade out effect for content change
+    flashcard.style.opacity = 0;
+
     setTimeout(() => {
-        updateFlashcard(); // Update content
-        flashcard.style.opacity = 1; // Fade in
-    }, 300); // Delay matches the transition duration
+        updateFlashcard(); // Update the content
+        flashcard.style.opacity = 1; // Fade back in
+    }, 300); // Delay matches the fade-out duration
 }
 
 // Function to update the counter
@@ -358,7 +368,6 @@ flashcard.addEventListener("click", () => {
     flashcard.classList.toggle("flipped");
 });
 
-// Navigation buttons
 prevBtn.addEventListener("click", () => {
     if (currentIndex > 0) {
         currentIndex--;
@@ -375,9 +384,7 @@ nextBtn.addEventListener("click", () => {
         studiedCount++;
         updateCounter();
     }
-});
-
-// Scramble button
+}); 
 scrambleBtn.addEventListener("click", () => {
     questions = questions.sort(() => Math.random() - 0.5); // Shuffle questions
     currentIndex = 0; // Reset to the first question
