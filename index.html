@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +8,8 @@
     <style>
 body {
     font-family: 'Poppins', Arial, sans-serif;
-    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    background-image: url(/background.png);
+    background-size: cover;
     margin: 0;
     padding: 0;
     display: flex;
@@ -23,7 +23,7 @@ body {
 h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
-    color: #333;
+    color: white;
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
@@ -71,13 +71,13 @@ h1 {
 }
 
 .flashcard-front {
-    background-color: #007bff;
+    background-color: rgb(128, 0, 0);
     color: white;
     box-shadow: inset 0 -5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .flashcard-back {
-    background-color: #28a745;
+    background-color: green;
     color: white;
     transform: rotateY(180deg);
     box-shadow: inset 0 -5px 15px rgba(0, 0, 0, 0.1);
@@ -96,7 +96,7 @@ h1 {
 }
 
 .controls button {
-    background-color: #007bff;
+    background-color: #147725;
     color: white;
     border: none;
     padding: 12px 20px;
@@ -112,12 +112,12 @@ h1 {
 }
 
 .controls button:hover:not(:disabled) {
-    background-color: #0056b3;
+    background-color: #054710;
     transform: translateY(-2px);
 }
 
 .controls button:disabled {
-    background-color: #cccccc;
+    background-color: #db0808;
     cursor: not-allowed;
     box-shadow: none;
 }
@@ -137,21 +137,15 @@ h1 {
     position: fixed;
     top: 0;
     width: 100%;
-    background: repeating-linear-gradient(
-        45deg,
-        green,
-        green 10px,
-        green 10px,
-        green 20px
-    );
+    background-color: #cc0000;
     color: #ffffff;
     text-align: center;
     padding: 10px 0;
-    font-size: 3rem;
+    font-size: 3rem;    
     font-weight: bold;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    z-index: 1000;  
 
 }
 
@@ -161,14 +155,14 @@ h1 {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
-    background-color: #ff0000;
+    background-color: #063b04;
     color: #ffffff;
     border: none;
     border-radius: 50%;
     font-size: 2rem;
     font-weight: bold;
-    width: 140px;
-    height: 140px;
+    width: 80px;
+    height: 80px;
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -188,7 +182,34 @@ h1 {
 body {
     margin-top: 60px; /* Prevent the banner from overlapping content */
 }
+.pull-tab {
+    position: fixed;
+    top: 0;
+    right: 10px;
+    width: 40px;
+    height: 30px;
+    background-color: #5a0202;
+    color: white;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 30px;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: none; /* Hidden by default */
+    z-index: 1001;
+    transition: background-color 0.3s ease;
+}
 
+.pull-tab:hover {
+    background-color: #3a0008;
+}
+
+/* Adjust body content to avoid overlap */
+body {
+    margin-top: 60px; /* Prevent the banner from overlapping content */
+}
 
     </style>
 </head>
@@ -197,6 +218,9 @@ body {
         <p><a style="text-decoration: none;     color: #ffffff;
 "  href="https://havarduniversity.github.io">havarduniversity.github.io</a></p>
         <button class="close-banner" id="close-banner">&times;</button>
+    </div>
+    <div class="pull-tab" id="pull-tab">
+        &#9654; <!-- Unicode for a right-pointing arrow -->
     </div>
     <div class="container">
         <h1>Bar Exam FlashCard <span>🎄</span></h1>
@@ -356,9 +380,23 @@ scrambleBtn.addEventListener("click", () => {
 
 // Close the banner when the "X" button is clicked
 // Close the banner when the "X" button is clicked
+// Close the banner and show the pull tab
 closeBannerBtn.addEventListener("click", () => {
     const banner = document.querySelector(".banner"); // Select the banner using its class
+    const pullTab = document.querySelector(".pull-tab"); // Select the pull-tab using its class
+
     banner.style.display = "none"; // Hide the banner
+    pullTab.style.display = "block"; // Show the pull tab
+});
+
+// Show the banner and hide the pull tab
+const pullTab = document.querySelector(".pull-tab");
+pullTab.addEventListener("click", () => {
+    const banner = document.querySelector(".banner"); // Select the banner using its class
+    pullTab.style.display = "none"; // Hide the pull tab
+    banner.style.display = "flex"; // Show the banner as a flex container
+    banner.style.justifyContent = "center"; // Ensure content stays centered
+    banner.style.alignItems = "center"; // Ensure content stays centered vertically
 });
 
 
