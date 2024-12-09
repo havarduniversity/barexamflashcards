@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-S4JKYKP7Y4"></script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-S4JKYKP7Y4');</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bar Exam Flashcards - Seedspeed</title>
@@ -9,7 +8,8 @@
     <style>
 body {
     font-family: 'Poppins', Arial, sans-serif;
-    background-image: url(https://havarduniversity.github.io/barexamflashcards/background.png);
+    background-repeat: no-repeat;
+    background-position: center;
     background-size: cover;
     margin: 0;
     padding: 0;
@@ -20,7 +20,9 @@ body {
     height: 100vh;
     overflow: hidden;
 }
-
+body {
+    transition: background-image 0.5s ease-in-out;
+}
 h1 {
     font-size: 2.5rem;
     margin-bottom: 20px;
@@ -234,6 +236,10 @@ body {
 "  href="https://havarduniversity.github.io">havarduniversity.github.io</a></p>
         <button class="close-banner" id="close-banner">&times;</button>
     </div>
+    <div class="controls">
+        <button id="refresh-btn">Refresh Background</button>
+    </div>
+    
     <div class="pull-tab" id="pull-tab">
         &#9654; <!-- Unicode for a right-pointing arrow -->
     </div>
@@ -418,6 +424,34 @@ pullTab.addEventListener("click", () => {
 
 // Initialize the first flashcard
 updateFlashcard();
+// List of background images
+// List of background images
+const backgrounds = [
+    "url(https://havarduniversity.github.io/barexamflashcards/background.png)",
+    "url(https://havarduniversity.github.io/barexamflashcards/12.png)",
+    "url(https://havarduniversity.github.io/barexamflashcards/background2.png)",
+    "url(https://havarduniversity.github.io/barexamflashcards/background3.png)",
+];
+
+// Variables for current background index
+let currentBackgroundIndex = new Date().getDate() % backgrounds.length;
+
+// Function to set the background
+function setBackground(index) {
+    document.body.style.backgroundImage = backgrounds[index];
+}
+
+// Function to cycle to the next background
+function refreshBackground() {
+    currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length;
+    setBackground(currentBackgroundIndex);
+}
+
+// Initialize background on page load
+setBackground(currentBackgroundIndex);
+
+// Attach event listener to the button
+document.getElementById("refresh-btn").addEventListener("click", refreshBackground);
 
 
             </script>
