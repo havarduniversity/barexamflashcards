@@ -41,7 +41,7 @@ const questions = [
     ["Who is the commander in chief of the armed forces?", "The President"],
     ["What is the term for a Supreme Court Judge?", "Lifetime appointment"],
     ["Impeach means to charge a public official with a crime done while in office.", "True"],
-    ["Who is the jury?", "The Senate"],
+    ["Who is the jury in a presidential impeachment?", "The Senate"],
     ["When an appellate court agrees with a trial court's decision they ______ it.", "Affirm"],
     ["When an appellate court changes the decision of a trial court’s decision they _______ it.", "Reverse"],
     ["The power of deciding what is constitutional is called?", "Judicial Review"],
