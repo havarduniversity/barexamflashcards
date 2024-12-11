@@ -228,6 +228,54 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for depth */
     display: inline-block; /* Ensures it doesn't stretch full width */
 }   
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Add space between elements */
+    max-width: 90%;
+    margin: auto;
+    text-align: center;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping */
+    gap: 10px; /* Space between buttons */
+    justify-content: center; /* Center align controls */
+    margin-top: 20px;
+}
+
+.controls button {
+    flex: 1 1 auto; /* Flexible button size */
+    max-width: 150px; /* Set a maximum button width */
+    text-align: center;
+}
+#bookmark-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745; /* Green background */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.5s ease-in-out;
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+#bookmark-notification.show {
+    opacity: 1; /* Show notification */
+}
+
+.hidden {
+    display: none; /* Keep it hidden when not used */
+}
+
     </style>
 </head>
 <body>
@@ -258,73 +306,83 @@ body {
         <div class="controls">
             <button id="prev-btn" disabled>&lt; Previous</button>
             <button id="scramble-btn">Scramble</button>
+            <button id="bookmark-btn">Bookmark</button>
             <button id="next-btn">Next &gt;</button>
+            <button id="review-btn">Review Bookmarked</button>
+            <div id="bookmark-notification" class="hidden"></div>
+
         </div>
+        
     </div>
-   
+    
     <script>
         // Paste the questions array here
         let questions = [
         ["How many senators are from each state?", "2 senators per state"],
-                    ["The number of representatives in the House is based on a state’s ______.", "Population"],
-                    ["Congress is made up of two houses. This is called ______.", "Bicameral"],
-                    ["How long is a member of the House of Representatives term?", "2 years"],
-                    ["Who approves the admission of a new state?", "Congress and the President"],
-                    ["How many current members are in the House of Representatives?", "435 total (in 2011)"],
-                    ["What is the minimum age of a senator?", "30 years"],
-                    ["How long must a senator have been a U.S. citizen?", "At least 9 years"],
-                    ["What is the minimum age of a House of Representatives?", "25 years"],
-                    ["How long must a representative have been a U.S. citizen?", "At least 7 years"],
-                    ["What is the title of the leader of the House of Representatives?", "Speaker of the House"],
-                    ["Who has the power to declare War?", "Congress"],
-                    ["Who is the jury in a presidential impeachment?", "The Senate"],
-                    ["Which branch of government consists of Congress and creates the laws?", "Legislative Branch"],
-                    ["What is the Supreme law of the land?", "The U.S. Constitution"],
-                    ["What is the shared power between the federal government and the state governments called?", "Federalism"],
-                    ["What words in the preamble show the U.S. belief in self-government?", "\"We the People\""],
-                    ["How many articles are there in the Constitution?", "7"],
-                    ["How long is a term for a senator?", "6 years"],
-                    ["A bill must be approved by both houses of Congress and the President before it becomes a ______.", "Law"],
-                    ["Who must approve judges, cabinet members, and ambassadors that the President appoints?", "The Senate"],
-                    ["The department heads of the Executive Branch make up the President’s _______.", "Cabinet"],
-                    ["What word means a change in the Constitution?", "Amendment"],
-                    ["What system allows each branch of government to limit the powers of the other two branches?", "Checks and Balances"],
-                    ["How long is a term for a President?", "4 years"],
-                    ["How many terms can a President serve?", "2 terms"],
-                    ["How many amendments to the Constitution?", "27"],
-                    ["What vote is required to override a presidential veto?", "Two-thirds of both houses of Congress"],
-                    ["What branch of government includes the President, and his cabinet and carries out the law?", "Executive Branch"],
-                    ["Who has the power to veto laws?", "The President"],
-                    ["The President appoints a _______ to lead each department in the Executive Branch.", "Secretary"],
-                    ["Which branch of government has the sole power to interpret the law, determine the constitutionality of the law, and apply it to individual cases?", "Judicial Branch"],
-                    ["The President must be a natural-born citizen. What does that mean?", "Born as a U.S. citizen"],
-                    ["What are the first 10 amendments to the Constitution called?", "The Bill of Rights"],
-                    ["What is the correct word for a person who makes laws?", "Legislator"],
-                    ["What type of court reviews a trial court’s verdict for errors?", "Appellate Court"],
-                    ["How many justices serve on the Supreme Court today?", "9"],
-                    ["How many departments are in the executive branch?", "15"],
-                    ["Who is the commander in chief of the armed forces?", "The President"],
-                    ["What is the term for a Supreme Court Judge?", "Lifetime appointment"],
-                    ["Impeach means to charge a public official with a crime done while in office.", "True"],
-                    ["What vote is needed to impeach?", "Simple majority in the House"],
-                    ["Who is the jury?", "The Senate"],
-                    ["When an appellate court agrees with a trial court's decision they ______ it.", "Affirm"],
-                    ["When an appellate court changes the decision of a trial court’s decision they _______ it.", "Reverse"],
-                    ["The power of deciding what is constitutional is called?", "Judicial Review"],
-                    ["What department includes the military and is responsible for protecting our nation’s military?", "Department of Defense"],
-                    ["What department manages our relationships with foreign countries?", "Department of State"],
-                    ["Which court hears cases involving federal laws, the U.S. Constitution, and disputes between citizens from different states?", "Federal Courts"],
-                    ["What court hears cases in which private citizens sue each other in court?", "Civil Court"],
-                    ["What is the highest court in the country?", "The Supreme Court"],
-                    ["What is the oldest federal law enforcement agency?", "U.S. Marshals Service"],
-                    ["What is the decision in a court trial called?", "Verdict"],
-                    ["What type of trial has no jury - just a judge that gives the verdict?", "Bench Trial"],
-                    ["What speech is the president required to make annually?", "State of the Union"],
-                    ["What department includes the Secret Service that protects the President, Vice President, and their families?", "Department of Homeland Security"]];
-        
-// Variables to track current flashcard and studied counter
+    ["The number of representatives in the House is based on a state’s ______.", "Population"],
+    ["Congress is made up of two houses. This is called ______.", "Bicameral"],
+    ["How long is a member of the House of Representatives term?", "2 years"],
+    ["Who approves the admission of a new state?", "Congress and the President"],
+    ["How many current members are in the House of Representatives?", "435 total (in 2011)"],
+    ["What is the minimum age of a senator?", "30 years"],
+    ["How long must a senator have been a U.S. citizen?", "At least 9 years"],
+    ["What is the minimum age of a House of Representatives?", "25 years"],
+    ["How long must a representative have been a U.S. citizen?", "At least 7 years"],
+    ["What is the title of the leader of the House of Representatives?", "Speaker of the House"],
+    ["Who has the power to declare War?", "Congress"],
+    ["Who is the jury in a presidential impeachment?", "The Senate"],
+    ["Which branch of government consists of Congress and creates the laws?", "Legislative Branch"],
+    ["What is the Supreme law of the land?", "The U.S. Constitution"],
+    ["What is the shared power between the federal government and the state governments called?", "Federalism"],
+    ["What words in the preamble show the U.S. belief in self-government?", "\"We the People\""],
+    ["How many articles are there in the Constitution?", "7"],
+    ["How long is a term for a senator?", "6 years"],
+    ["A bill must be approved by both houses of Congress and the President before it becomes a ______.", "Law"],
+    ["Who must approve judges, cabinet members, and ambassadors that the President appoints?", "The Senate"],
+    ["The department heads of the Executive Branch make up the President’s ______.", "Cabinet"],
+    ["What word means a change in the Constitution?", "Amendment"],
+    ["What system allows each branch of government to limit the powers of the other two branches?", "Checks and Balances"],
+    ["How long is a term for a President?", "4 years"],
+    ["How many terms can a President serve?", "2 terms"],
+    ["How many amendments to the Constitution?", "27"],
+    ["What vote is required to override a presidential veto?", "Two-thirds of both houses of Congress"],
+    ["What branch of government includes the President, and his cabinet and carries out the law?", "Executive Branch"],
+    ["Who has the power to veto laws?", "The President"],
+    ["The President appoints a _______ to lead each department in the Executive Branch.", "Secretary"],
+    ["Which branch of government has the sole power to interpret the law, determine the constitutionality of the law, and apply it to individual cases?", "Judicial Branch"],
+    ["The President must be a natural-born citizen. What does that mean?", "Born as a U.S. citizen"],
+    ["What are the first 10 amendments to the Constitution called?", "The Bill of Rights"],
+    ["What is the correct word for a person who makes laws?", "Legislator"],
+    ["What type of court reviews a trial court’s verdict for errors?", "Appellate Court"],
+    ["How many justices serve on the Supreme Court today?", "9"],
+    ["How many departments are in the executive branch?", "15"],
+    ["Who is the commander in chief of the armed forces?", "The President"],
+    ["What is the term for a Supreme Court Judge?", "Lifetime appointment"],
+    ["Impeach means to charge a public official with a crime done while in office.", "True"],
+    ["What vote is needed to impeach?", "Simple majority in the House"],
+    ["Who is the jury?", "The Senate"],
+    ["When an appellate court agrees with a trial court's decision they ______ it.", "Affirm"],
+    ["When an appellate court changes the decision of a trial court’s decision they _______ it.", "Reverse"],
+    ["The power of deciding what is constitutional is called?", "Judicial Review"],
+    ["What department includes the military and is responsible for protecting our nation’s military?", "Department of Defense"],
+    ["What department manages our relationships with foreign countries?", "Department of State"],
+    ["Which court hears cases involving federal laws, the U.S. Constitution, and disputes between citizens from different states?", "Federal Courts"],
+    ["What court hears cases in which private citizens sue each other in court?", "Civil Court"],
+    ["What is the highest court in the country?", "The Supreme Court"],
+    ["What is the oldest federal law enforcement agency?", "U.S. Marshals Service"],
+    ["What is the decision in a court trial called?", "Verdict"],
+    ["What type of trial has no jury - just a judge that gives the verdict?", "Bench Trial"],
+    ["How many senators are in the U.S. Senate?", "100"],
+    ["What is the term for a federal judge?", "Lifetime appointment"],
+    ["What speech is the president required to make annually?", "State of the Union"],
+    ["What department includes the Secret Service that protects the President, Vice President, and their families?", "Department of Homeland Security"]
+];
+
+  
+// Variables
 let currentIndex = 0;
 let studiedCount = 0;
+let bookmarkedIndices = [];
 
 // Elements
 const flashcard = document.getElementById("flashcard");
@@ -333,7 +391,19 @@ const flashcardBack = document.getElementById("flashcard-back");
 const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const scrambleBtn = document.getElementById("scramble-btn");
+const bookmarkBtn = document.getElementById("bookmark-btn");
+const reviewBtn = document.getElementById("review-btn");
+const counterDisplay = document.createElement("div");
+const notification = document.createElement("div");
 const closeBannerBtn = document.getElementById("close-banner");
+const pullTab = document.getElementById("pull-tab");
+
+// Add notification element to the body
+notification.id = "bookmark-notification";
+notification.classList.add("hidden");
+document.body.appendChild(notification);
+
+// Initialize flashcard content
 function updateFlashcard() {
     flashcardFront.innerHTML = `<p>${questions[currentIndex][0]}</p>`;
     flashcardBack.innerHTML = `<p>${questions[currentIndex][1]}</p>`;
@@ -341,39 +411,43 @@ function updateFlashcard() {
     nextBtn.disabled = currentIndex === questions.length - 1;
 }
 
-// Add a counter display to the page
-const counterDisplay = document.createElement("div");
-counterDisplay.style.marginTop = "20px";
-counterDisplay.style.fontSize = "1.2rem";
-counterDisplay.style.fontWeight = "bold";
-counterDisplay.textContent = `Studied: ${studiedCount}`;
-document.body.appendChild(counterDisplay);
-
-// Initialize the flashcard content
-
+// Smooth transition for updating content
 function smoothUpdate() {
-    // Ensure the card is not flipped before transitioning
     flashcard.classList.remove("flipped");
-
-    // Fade out effect for content change
     flashcard.style.opacity = 0;
 
     setTimeout(() => {
-        updateFlashcard(); // Update the content
-        flashcard.style.opacity = 1; // Fade back in
-    }, 300); // Delay matches the fade-out duration
+        updateFlashcard();
+        flashcard.style.opacity = 1;
+    }, 300);
 }
 
-// Function to update the counter
+// Update studied counter
 function updateCounter() {
     counterDisplay.textContent = `Studied: ${studiedCount}`;
 }
 
-// Flip flashcard
+// Show notification
+function showNotification(message, color = "#28a745") {
+    notification.textContent = message;
+    notification.style.backgroundColor = color;
+    notification.classList.remove("hidden");
+    notification.classList.add("show");
+
+    setTimeout(() => {
+        notification.classList.remove("show");
+        setTimeout(() => {
+            notification.classList.add("hidden");
+        }, 500);
+    }, 3000);
+}
+
+// Event listener for flashcard flip
 flashcard.addEventListener("click", () => {
     flashcard.classList.toggle("flipped");
 });
 
+// Navigation: Previous button
 prevBtn.addEventListener("click", () => {
     if (currentIndex > 0) {
         currentIndex--;
@@ -383,6 +457,7 @@ prevBtn.addEventListener("click", () => {
     }
 });
 
+// Navigation: Next button
 nextBtn.addEventListener("click", () => {
     if (currentIndex < questions.length - 1) {
         currentIndex++;
@@ -390,69 +465,88 @@ nextBtn.addEventListener("click", () => {
         studiedCount++;
         updateCounter();
     }
-}); 
+});
+
+// Scramble button
 scrambleBtn.addEventListener("click", () => {
-    questions = questions.sort(() => Math.random() - 0.5); // Shuffle questions
-    currentIndex = 0; // Reset to the first question
+    questions = questions.sort(() => Math.random() - 0.5);
+    currentIndex = 0;
     smoothUpdate();
-    studiedCount = 0; // Reset counter
+    studiedCount = 0;
     updateCounter();
-    flashcard.classList.remove("flipped"); // Reset flip
+    flashcard.classList.remove("flipped");
+    showNotification("Questions scrambled!");
 });
 
-// Close the banner when the "X" button is clicked
-// Close the banner when the "X" button is clicked
-// Close the banner and show the pull tab
+// Bookmark button
+bookmarkBtn.addEventListener("click", () => {
+    if (!bookmarkedIndices.includes(currentIndex)) {
+        bookmarkedIndices.push(currentIndex);
+        showNotification("Flashcard bookmarked!");
+    } else {
+        showNotification("Flashcard is already bookmarked!", "#dc3545");
+    }
+});
+
+// Review bookmarked questions
+reviewBtn.addEventListener("click", () => {
+    if (bookmarkedIndices.length === 0) {
+        showNotification("No bookmarked flashcards to review!", "#dc3545");
+        return;
+    }
+
+    let bookmarkedQuestions = bookmarkedIndices.map(index => questions[index]);
+    questions = bookmarkedQuestions;
+    currentIndex = 0;
+    smoothUpdate();
+    bookmarkedIndices = [];
+    showNotification("Reviewing bookmarked flashcards.");
+});
+
+// Initialize counter display
+counterDisplay.style.marginTop = "20px";
+counterDisplay.style.fontSize = "1.2rem";
+counterDisplay.style.fontWeight = "bold";
+counterDisplay.textContent = `Studied: ${studiedCount}`;
+document.body.appendChild(counterDisplay);
+
+// Banner close functionality
 closeBannerBtn.addEventListener("click", () => {
-    const banner = document.querySelector(".banner"); // Select the banner using its class
-    const pullTab = document.querySelector(".pull-tab"); // Select the pull-tab using its class
-
-    banner.style.display = "none"; // Hide the banner
-    pullTab.style.display = "block"; // Show the pull tab
+    const banner = document.querySelector(".banner");
+    banner.style.display = "none";
+    pullTab.style.display = "block";
 });
 
-// Show the banner and hide the pull tab
-const pullTab = document.querySelector(".pull-tab");
 pullTab.addEventListener("click", () => {
-    const banner = document.querySelector(".banner"); // Select the banner using its class
-    pullTab.style.display = "none"; // Hide the pull tab
-    banner.style.display = "flex"; // Show the banner as a flex container
-    banner.style.justifyContent = "center"; // Ensure content stays centered
-    banner.style.alignItems = "center"; // Ensure content stays centered vertically
+    const banner = document.querySelector(".banner");
+    pullTab.style.display = "none";
+    banner.style.display = "flex";
 });
 
-
-// Initialize the first flashcard
-updateFlashcard();
-// List of background images
-// List of background images
+// Background rotation
 const backgrounds = [
     "url(https://havarduniversity.github.io/barexamflashcards/background.png)",
-    "url(https://havarduniversity.github.io/barexamflashcards/12.png)",
+    "url(https://havarduniversity.github.io/barexamflashcards/background1.png)",
     "url(https://havarduniversity.github.io/barexamflashcards/background2.png)",
-    "url(https://havarduniversity.github.io/barexamflashcards/background3.png)",
+    "url(https://havarduniversity.github.io/barexamflashcards/background3.png)"
 ];
-
-// Variables for current background index
 let currentBackgroundIndex = new Date().getDate() % backgrounds.length;
 
-// Function to set the background
 function setBackground(index) {
     document.body.style.backgroundImage = backgrounds[index];
 }
 
-// Function to cycle to the next background
 function refreshBackground() {
     currentBackgroundIndex = (currentBackgroundIndex + 1) % backgrounds.length;
     setBackground(currentBackgroundIndex);
 }
 
-// Initialize background on page load
 setBackground(currentBackgroundIndex);
 
-// Attach event listener to the button
 document.getElementById("refresh-btn").addEventListener("click", refreshBackground);
 
+// Initialize flashcard on page load
+updateFlashcard();
 
             </script>
 </body>
