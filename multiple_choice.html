@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Quiz</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Assuming styles are shared -->
+    <style>
+    body{
+            background-image: url(https://havarduniversity.github.io/barexamflashcards/background.png);
+            font-family: 'Poppins', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        #feedback {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 20px 40px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1, h2 {
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        #quiz-container {
+            width: 100%;
+        }
+
+        #question {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .quiz-option {
+            padding: 15px;
+            background-color: #239c0a;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-align: center;
+        }
+
+        .quiz-option:hover {
+            background-color: #8d0808;
+        }
+
+        .quiz-option:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .controls-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            background-color: #00a2ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .controls-button:hover {
+            background-color: #75bcff;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #result {
+            text-align: center;
+        }
+
+        #score {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Practice Quiz</h1>
+        <div id="quiz-container">
+            <!-- Progress tracker -->
+            <p id="progress"></p>
+            <!-- Question -->
+            <p id="question">Question will appear here</p>
+            <!-- Answer options -->
+            <div id="options"></div>
+            <!-- Feedback -->
+            <p id="feedback" class="hidden"></p>
+            <!-- Next button -->
+            <button id="next-question" class="controls-button" disabled>Next Question</button>
+        </div>
+        <div id="result" class="hidden">
+            <h2>Quiz Completed!</h2>
+            <p id="score"></p>
+            <button id="review-incorrect" class="controls-button hidden">Review What You Got Wrong</button>
+            <button onclick="window.location.href='index.html'" class="controls-button">Return to Flashcards</button>
+        </div>
+    </div>
+    <script src="quiz.js"></script>
+</body>
+</html>

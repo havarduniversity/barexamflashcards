@@ -138,7 +138,9 @@ function checkAnswer(selected, correct) {
     } else {
         feedbackElement.textContent = `Incorrect! The correct answer is: ${correct}`;
         feedbackElement.style.color = "red";
-        incorrectQuestions.push(shuffledQuestions[currentQuestionIndex]); // Save incorrect question
+        if (!incorrectQuestions.includes(shuffledQuestions[currentQuestionIndex])) {
+            incorrectQuestions.push(shuffledQuestions[currentQuestionIndex]); // Save unique incorrect question
+        }
     }
     nextButton.disabled = false;
 }
@@ -160,18 +162,26 @@ function showResults() {
     scoreElement.textContent = `You scored ${score} out of ${shuffledQuestions.length}`;
     if (incorrectQuestions.length === 0) {
         reviewButton.style.display = "none"; // Hide review button if no incorrect answers
+    } else {
+        reviewButton.style.display = "block"; // Show review button if incorrect answers exist
     }
 }
 
 // Review incorrect questions
 function reviewIncorrectQuestions() {
+    if (incorrectQuestions.length === 0) {
+        alert("No incorrect questions to review!");
+        return;
+    }
     shuffledQuestions = [...incorrectQuestions]; // Replace questions with incorrect ones
     currentQuestionIndex = 0;
-    incorrectQuestions = []; // Clear incorrect questions
+    incorrectQuestions = []; // Clear incorrect questions for the next round
     score = 0; // Reset score
+    feedbackElement.textContent = ""; // Clear feedback
+    updateProgress(); // Reset progress
     resultContainer.classList.add("hidden");
     document.getElementById("quiz-container").classList.remove("hidden");
-    loadQuestion();
+    loadQuestion(); // Start from the first question in the new set
 }
 
 // Initialize quiz
