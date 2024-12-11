@@ -60,6 +60,7 @@ const questions = [
 ];
 
 // Variables
+let shuffledQuestions = []; // Array to store shuffled questions
 let currentQuestionIndex = 0;
 let score = 0;
 let incorrectQuestions = []; // Track incorrect questions
@@ -87,14 +88,19 @@ reviewButton.style.marginTop = "20px";
 reviewButton.onclick = reviewIncorrectQuestions;
 resultContainer.appendChild(reviewButton);
 
+// Function to shuffle questions
+function shuffleQuestions() {
+    shuffledQuestions = [...questions].sort(() => Math.random() - 0.5); // Shuffle the questions array
+}
+
 // Update progress display
 function updateProgress() {
-    progressElement.textContent = `Question ${currentQuestionIndex + 1} out of ${questions.length}`;
+    progressElement.textContent = `Question ${currentQuestionIndex + 1} out of ${shuffledQuestions.length}`;
 }
 
 // Load a question
 function loadQuestion() {
-    const [question, correctAnswer] = questions[currentQuestionIndex];
+    const [question, correctAnswer] = shuffledQuestions[currentQuestionIndex];
     questionElement.textContent = question;
     feedbackElement.textContent = ""; // Clear feedback
 
@@ -132,7 +138,7 @@ function checkAnswer(selected, correct) {
     } else {
         feedbackElement.textContent = `Incorrect! The correct answer is: ${correct}`;
         feedbackElement.style.color = "red";
-        incorrectQuestions.push(questions[currentQuestionIndex]); // Save incorrect question
+        incorrectQuestions.push(shuffledQuestions[currentQuestionIndex]); // Save incorrect question
     }
     nextButton.disabled = false;
 }
@@ -140,7 +146,7 @@ function checkAnswer(selected, correct) {
 // Move to the next question
 nextButton.addEventListener("click", () => {
     currentQuestionIndex++;
-    if (currentQuestionIndex < questions.length) {
+    if (currentQuestionIndex < shuffledQuestions.length) {
         loadQuestion();
     } else {
         showResults();
@@ -151,7 +157,7 @@ nextButton.addEventListener("click", () => {
 function showResults() {
     document.getElementById("quiz-container").classList.add("hidden");
     resultContainer.classList.remove("hidden");
-    scoreElement.textContent = `You scored ${score} out of ${questions.length}`;
+    scoreElement.textContent = `You scored ${score} out of ${shuffledQuestions.length}`;
     if (incorrectQuestions.length === 0) {
         reviewButton.style.display = "none"; // Hide review button if no incorrect answers
     }
@@ -159,7 +165,7 @@ function showResults() {
 
 // Review incorrect questions
 function reviewIncorrectQuestions() {
-    questions.splice(0, questions.length, ...incorrectQuestions); // Replace questions with incorrect ones
+    shuffledQuestions = [...incorrectQuestions]; // Replace questions with incorrect ones
     currentQuestionIndex = 0;
     incorrectQuestions = []; // Clear incorrect questions
     score = 0; // Reset score
@@ -168,5 +174,6 @@ function reviewIncorrectQuestions() {
     loadQuestion();
 }
 
-// Initialize
+// Initialize quiz
+shuffleQuestions(); // Shuffle questions at the start
 loadQuestion();
